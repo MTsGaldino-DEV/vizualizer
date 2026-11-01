@@ -1,0 +1,28 @@
+{
+  "_aviso": "FIXTURE SINTETICA realista (sem chave de provedor na noite 1). Substituir por resposta real na Fase 0 de verdade.",
+  "username": "mock-perfil-b",
+  "posts": [
+    {
+      "igId": "966173636309901",
+      "legenda": "",
+      "shortcode": "DkLmNo9001",
+      "tipo": "video",
+      "ehReels": true,
+      "fixado": false,
+      "publicadoEm": "2026-10-30T23:01:41.069Z",
+      "permalink": "https://www.instagram.com/reel/DkLmNo9001/",
+      "duracaoS": 15,
+      "urlVideo": "https://cdn.example/b1.mp4"
+    },
+    {
+      "igId": "618206559274821",
+      "legenda": "",
+      "shortcode": "DkLmNo9002",
+      "tipo": "imagem",
+      "ehReels": false,
+      "fixado": false,
+      "publicadoEm": "2026-10-30T03:01:41.069Z",
+      "permalink": "https://www.instagram.com/p/DkLmNo9002/"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "_aviso": "FIXTURE SINTETICA realista (sem chave de provedor na noite 1). Substituir por resposta real na Fase 0 de verdade.",
+  "username": "mock-perfil-a",
+  "posts": [
+    {
+      "igId": "248301325448462",
+      "legenda": "Post fixado antigo",
+      "shortcode": "CfIXaDo001",
+      "tipo": "video",
+      "ehReels": true,
+      "fixado": true,
+      "publicadoEm": "2026-09-22T05:01:41.065Z",
+      "permalink": "https://www.instagram.com/reel/CfIXaDo001/",
+      "duracaoS": 34,
+      "urlVideo": "https://cdn.example/v1.mp4"
+    },
+    {
+      "igId": "713602439827672",
+      "legenda": "Reels recente",
+      "shortcode": "CfIXaDo002",
+      "tipo": "video",
+      "ehReels": true,
+      "fixado": false,
+      "publicadoEm": "2026-11-01T04:43:41.068Z",
+      "permalink": "https://www.instagram.com/reel/CfIXaDo002/",
+      "duracaoS": 52,
+      "urlVideo": "https://cdn.example/v2.mp4"
+    },
+    {
+      "igId": "556611422100729",
+      "legenda": "",
+      "shortcode": "CfIXaDo003",
+      "tipo": "carrossel",
+      "ehReels": false,
+      "fixado": false,
+      "publicadoEm": "2026-11-01T00:01:41.068Z",
+      "permalink": "https://www.instagram.com/p/CfIXaDo003/"
+    },
+    {
+      "igId": "25285392377032",
+      "legenda": "",
+      "shortcode": "CfIXaDo004",
+      "tipo": "imagem",
+      "ehReels": false,
+      "fixado": false,
+      "publicadoEm": "2026-10-31T14:01:41.068Z",
+      "permalink": "https://www.instagram.com/p/CfIXaDo004/"
+    },
+    {
+      "igId": "78927589674672",
+      "legenda": "",
+      "shortcode": "CfIXaDo005",
+      "tipo": "video",
+      "ehReels": false,
+      "fixado": false,
+      "publicadoEm": "2026-10-30T23:01:41.068Z",
+      "permalink": "https://www.instagram.com/p/CfIXaDo005/",
+      "duracaoS": 20,
+      "urlVideo": "https://cdn.example/v5.mp4"
+    }
+  ]
+}
