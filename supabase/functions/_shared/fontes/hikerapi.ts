@@ -23,7 +23,12 @@ export function normalizarHiker(item: Item): PostIG {
     publicadoEm: typeof ts === "number" ? new Date(ts * 1000) : new Date(ts),
     legenda: item.caption_text ?? item.caption?.text ?? undefined,
     permalink: `https://www.instagram.com/${ehReels ? "reel" : "p"}/${code}/`,
-    urlVideo: item.video_url ?? item.resources?.find((r: Item) => r.video_url)?.video_url ?? undefined,
+    urlVideo:
+      item.video_url ??
+      item.video_versions?.[0]?.url ??
+      item.resources?.find((r: Item) => r.video_url)?.video_url ??
+      item.carousel_media?.find((c: Item) => c.video_versions?.length)?.video_versions?.[0]?.url ??
+      undefined,
     urlThumb: item.thumbnail_url ?? item.image_versions2?.candidates?.[0]?.url ?? undefined,
     duracaoS: item.video_duration ?? undefined,
   };

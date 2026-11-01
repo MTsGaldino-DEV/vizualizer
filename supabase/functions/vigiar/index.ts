@@ -15,6 +15,7 @@ import {
 import { criarFonteMock, type PostCru } from "../_shared/fontes/mock.ts";
 import { criarFonteHikerAPI } from "../_shared/fontes/hikerapi.ts";
 import { criarFonteBusinessDiscovery } from "../_shared/fontes/business-discovery.ts";
+import { criarFonteScrapeCreators } from "../_shared/fontes/scrapecreators.ts";
 import type { FonteInstagram } from "../_shared/fontes/tipos.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -34,6 +35,7 @@ Deno.serve(async (req) => {
       return (data?.valor as PostCru[] | undefined) ?? null;
     }),
     hikerapi: criarFonteHikerAPI(Deno.env.get("PROVEDOR_IG_API_KEY")),
+    scrapecreators: criarFonteScrapeCreators(Deno.env.get("SCRAPECREATORS_API_KEY")),
     "business-discovery": criarFonteBusinessDiscovery(Deno.env.get("IG_GRAPH_USER_ID"), Deno.env.get("IG_GRAPH_TOKEN")),
   };
   const nomePrincipal = Deno.env.get("FONTE_PRINCIPAL") ?? "mock";
