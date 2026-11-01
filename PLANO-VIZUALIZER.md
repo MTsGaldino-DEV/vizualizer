@@ -521,6 +521,8 @@ C:\APPWEB\Vizualizer
 | 2026-11-01 | 7 | Deploy **não** executado; runbook e checklist prontos | Regra do modo noturno; `docs/runbook.md` |
 | 2026-11-01 | 5 | Worker usa `gemma3:4b` para visão e texto; resumo de Reel real em ~9 s (quente) / 32 s (frio) | `docs/benchmark-ia.md` |
 | 2026-11-01 | 0 | ScrapeCreators validada com 1 chamada real: 12 posts em ~12 s; frescor ainda não medido | `fixtures/ig/scrapecreators-instagram.json` |
+| 2026-11-01 | 5 | Transcrição ligada: whisper.cpp (CPU, `ggml-small`); job com fala real em ~73 s a frio | `docs/benchmark-ia.md` |
+| 2026-11-01 | 3 | Evolution API local em Docker; falta só ler o QR com o WhatsApp que vai enviar | `infra/evolution/docker-compose.yml` |
 
 ---
 

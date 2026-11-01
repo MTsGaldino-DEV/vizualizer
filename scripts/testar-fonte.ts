@@ -38,3 +38,26 @@ console.table(
 const arquivo = `fixtures/ig/scrapecreators-${handle}.json`;
 writeFileSync(arquivo, JSON.stringify({ _aviso: `Resposta REAL da ScrapeCreators em ${new Date().toISOString()} (URLs do CDN expiram).`, ...bruto }, null, 2));
 console.log(`resposta crua salva em ${arquivo}`);
+
+// Modo frescor: `pnpm testar-fonte <perfil> <minutos> <intervaloS>` — repete a chamada e, quando um post
+// novo aparece, mostra quanto tempo depois da publicação a fonte o entregou. Custa minutos*60/intervaloS créditos.
+const [minutos = 0, intervaloS = 0] = process.argv.slice(3).map(Number);
+if (minutos > 0 && intervaloS > 0) {
+  const vistos = new Set(posts.map((p) => p.shortcode));
+  const fim = Date.now() + minutos * 60_000;
+  console.log(`vigiando @${handle} por ${minutos} min a cada ${intervaloS} s (~${Math.ceil((minutos * 60) / intervaloS)} créditos)`);
+  while (Date.now() < fim) {
+    await new Promise((r) => setTimeout(r, intervaloS * 1000));
+    try {
+      const atuais = await criarFonteScrapeCreators(process.env.SCRAPECREATORS_API_KEY, fetch, 45_000).ultimosPosts(handle, 12);
+      for (const p of atuais.filter((p) => !vistos.has(p.shortcode))) {
+        vistos.add(p.shortcode);
+        console.log(`NOVO ${p.shortcode} (${p.tipo}) entregue ${Math.round((Date.now() - p.publicadoEm.getTime()) / 1000)} s após publicar`);
+      }
+      process.stdout.write(".");
+    } catch (e) {
+      console.log(`\nerro: ${(e as Error).message}`);
+    }
+  }
+  console.log("\nfim");
+}

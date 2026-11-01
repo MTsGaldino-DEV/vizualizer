@@ -8,3 +8,4 @@ scripts/saida/
 .supabase/
 supabase/.temp/
 *.log
+ferramentas/

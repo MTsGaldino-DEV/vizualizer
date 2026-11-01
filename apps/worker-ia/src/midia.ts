@@ -1,7 +1,7 @@
 // ffmpeg (áudio 16 kHz mono + quadros-chave) e whisper.cpp (transcrição). Tudo local, via processos.
 import { execFile } from "node:child_process";
 import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { availableParallelism, tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
@@ -46,7 +46,9 @@ export async function extrairMidia(video: string, cfg: { ffmpeg: string; ffprobe
 /** Transcreve com whisper.cpp (`whisper-cli -m modelo -l pt -nt -f audio.wav`). Sem binário/modelo → null. */
 export async function transcrever(wav: string | null, cfg: { cli?: string; modelo?: string }): Promise<string | null> {
   if (!wav || !cfg.cli || !cfg.modelo) return null;
-  const { stdout } = await exec(cfg.cli, ["-m", cfg.modelo, "-l", "auto", "-nt", "-np", "-f", wav], { timeout: 120_000, maxBuffer: 8 << 20 });
+  // whisper usa 4 threads por padrão; 8 foi ~15% mais rápido no PC de teste (12 lógicos).
+  const threads = String(Math.min(8, availableParallelism()));
+  const { stdout } = await exec(cfg.cli, ["-t", threads, "-m", cfg.modelo, "-l", "auto", "-nt", "-np", "-f", wav], { timeout: 120_000, maxBuffer: 8 << 20 });
   const texto = stdout.replace(/\[[^\]]*\]/g, "").replace(/\s+/g, " ").trim();
   return texto || null;
 }

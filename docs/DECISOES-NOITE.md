@@ -43,3 +43,6 @@
 | 39 | `allowBuilds: esbuild` no `pnpm-workspace.yaml` | desligar a checagem de builds | O pnpm 12 abortava instalações (inclusive a do shadcn) por ignorar o build do esbuild; aprova só ele |
 | 40 | `gemma3:4b` para visão **e** texto no worker | `gemma3:4b` + `qwen3:8b` | Pedido do Matheus; 49 s x 71 s a frio, ~9 s quente, um modelo só na VRAM |
 | 41 | Fonte principal do robô continua `mock` mesmo com a chave da ScrapeCreators | ligar já | 1 crédito por checagem: 98 créditos acabam em ~16 min com 1 perfil a 10 s; latência medida ~12 s > tick de 10 s |
+| 42 | whisper.cpp v1.9.5 build BLAS (CPU) + `ggml-small` em `ferramentas/whisper/` (fora do git), `-t 8` | build Vulkan | Não há binário Vulkan pronto para Windows; compilar exige Vulkan SDK + compilador. CPU transcreve 52 s de áudio em ~31 s, qualidade boa em PT |
+| 43 | Evolution API v2.3.7 local em Docker (`infra/evolution/`), porta só em `127.0.0.1:56430`, Postgres + Redis próprios | `latest`, Manager separado | Versão fixa e reproduzível; o Manager já vem embutido em `/manager` |
+| 44 | Teste de frescor da ScrapeCreators só com post feito na hora (`pnpm testar-fonte <perfil> <min> <intervaloS>`) | vigiar 1 h às cegas | @oreidosites estava 48 h sem postar: 1 h a 60 s gastaria ~60 de 97 créditos sem garantia de ver post novo |

@@ -34,3 +34,16 @@ Ponta a ponta no worker (`pnpm simular --esperar-resumo` com o Reel real): **32 
 Resumo gerado (B, ponta a ponta): "Um criador demonstra o processo de criação de uma peça de roupa temática de Halloween, utilizando tecido preto com pregas e detalhes em branco… Ele utiliza ferramentas como tesoura e agulha para criar os desenhos e, por fim, veste a peça finalizada."
 
 **Escolha: `gemma3:4b` para visão e texto.** Mais rápido, um só modelo na VRAM (3,4 GB), sem troca de modelo; o worker mantém o modelo carregado entre visão e texto quando é o mesmo. As duas combinações variam em detalhes pequenos (ex.: "arroz" x "grânulos") — sem a fala transcrita, a descrição depende só dos quadros.
+
+## Atualização — transcrição com whisper.cpp (2026-11-01)
+
+Build `whisper-blas-bin-x64` (v1.9.5, CPU) + `ggml-small.bin` (465 MB), em `ferramentas/whisper/`. Reel real de 52 s do @oreidosites com fala em PT:
+
+| Threads | Tempo |
+|---|---|
+| 4 (padrão do whisper) | 36,3 s |
+| **8** | **31,0 s** |
+
+Transcrição fiel ("rapaziada internet acabou… um cara criou um software… unifica todos os google drives gratuitos…"). Ponta a ponta no worker (whisper + `gemma3:4b` frio): **72,8 s**. Resumo gerado: "O vídeo apresenta o software 9Drive, que unifica contas de armazenamento em nuvem gratuitas… Ele argumenta que a IA está substituindo serviços pagos, como Google Drive e Spotify."
+
+O alerta não espera nada disso (sai em ~1 s); só o resumo chega depois.
