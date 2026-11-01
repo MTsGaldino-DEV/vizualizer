@@ -1,0 +1,13 @@
+{
+  "name": "@vizualizer/worker-ia",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "benchmark": "tsx src/benchmark.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "@vizualizer/shared": "workspace:*"
+  }
+}

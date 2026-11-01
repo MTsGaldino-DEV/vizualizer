@@ -29,3 +29,6 @@
 | 25 | Chaves VAPID geradas localmente (web-push CLI) em `.env` ignorados | não gerar | Não é serviço externo; permite testar push de verdade no local |
 | 26 | `[auth.email] enable_signup` fica `true` (o global é `false`) | ambos false | O flag de e-mail desliga o login por e-mail inteiro (achado ao testar) |
 | 27 | Screenshots com Playwright usando o Chrome instalado (`channel: chrome`) | baixar Chromium | Download iria para fora da pasta do projeto |
+| 28 | Não baixar modelos do Ollama nem whisper.cpp | `ollama pull` / baixar binário | Gravariam fora da pasta do projeto (limite rígido); worker funciona sem eles |
+| 29 | Texto com `qwen3:8b` (`think:false`) | outro modelo | Único instalado; resumo coerente em 3–4 s com modelo quente |
+| 30 | Tarefa agendada do worker só como script (`scripts/worker-ia-tarefa.ps1`), não registrada | registrar | Alteraria o sistema fora do projeto |
