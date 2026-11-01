@@ -2,11 +2,13 @@
 // `{ "limpar": true }` remove arquivos com mais de 48 h (cron diário).
 // URL `mock://<arquivo>` copia de `videos-temp/amostras/<arquivo>` (usado por `pnpm simular`).
 
-import { admin, json } from "../_shared/supabase.ts";
+import { admin, exigirServico, json } from "../_shared/supabase.ts";
 
 const BUCKET = "videos-temp";
 
 Deno.serve(async (req) => {
+  const negado = exigirServico(req);
+  if (negado) return negado;
   const db = admin();
   const corpo = await req.json().catch(() => ({}));
   if (corpo.limpar) return json(await limpar(db));

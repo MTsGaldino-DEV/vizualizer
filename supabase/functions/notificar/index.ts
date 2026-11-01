@@ -1,7 +1,7 @@
 // Fila de notificações (seção 6): pega pendentes, envia por canal, retry com backoff (até 3 tentativas).
 // Cada linha é um dispositivo → falha de um canal não bloqueia os outros (allSettled).
 
-import { admin, json } from "../_shared/supabase.ts";
+import { admin, exigirServico, json } from "../_shared/supabase.ts";
 import { backoffS, MAX_TENTATIVAS, montarMensagem, textoWhatsApp, type CanalNotificacao } from "../_shared/canais/tipos.ts";
 import { criarCanalWhatsApp } from "../_shared/canais/whatsapp.ts";
 import { criarCanalWebPush } from "../_shared/canais/webpush.ts";
@@ -9,7 +9,9 @@ import { canalExpoStub } from "../_shared/canais/expo.ts";
 
 const env = (k: string) => Deno.env.get(k) || undefined;
 
-Deno.serve(async () => {
+Deno.serve(async (req) => {
+  const negado = exigirServico(req);
+  if (negado) return negado;
   const db = admin();
   const canais: Record<string, CanalNotificacao> = {
     whatsapp: criarCanalWhatsApp({
@@ -32,6 +34,16 @@ Deno.serve(async () => {
       await new Promise((r) => setTimeout(r, 300 * (i + 1)));
     }
   };
+
+  // Aviso de sistema ao admin (ex.: robô parado): direto, sem fila, para todos os dispositivos ativos.
+  const corpo = await req.json().catch(() => ({}));
+  if (typeof corpo.sistema === "string") {
+    const { data: disp } = await db.from("dispositivos").select("*").eq("ativo", true);
+    const msg = { tipoMsg: "alerta" as const, titulo: "⚠️ Vizualizer", corpo: corpo.sistema, url: `${urlPainel}/saude` };
+    msg.textoWhatsApp = `${msg.titulo}\n${msg.corpo}\nSaúde: ${msg.url}`;
+    const r = await Promise.allSettled((disp ?? []).map((d) => canais[d.tipo]?.enviar(d.destino, msg)));
+    return json({ sistema: true, enviados: r.filter((x) => x.status === "fulfilled").length });
+  }
 
   const { data: fila, error } = await db.rpc("pegar_notificacoes", { lim: 20 });
   if (error) return json({ erro: error.message }, 500);

@@ -1,7 +1,7 @@
 // Tick do robô (seção 3). Chamado pelo Supabase Cron a cada 10 s.
 // 1. pega perfis vencidos  2. consulta a fonte  3. classifica  4. registra (dedupe no banco)  5. dispara notificar.
 
-import { admin, dispararFuncao, json } from "../_shared/supabase.ts";
+import { admin, dispararFuncao, exigirServico, json } from "../_shared/supabase.ts";
 import { classificarPosts, separarValidos } from "../_shared/regras/deteccao.ts";
 import {
   avaliarCircuito,
@@ -22,7 +22,9 @@ declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
 const LIMITE_POSTS = 12;
 const CIRCUITO = { limite: 5, pausaMin: 10 };
 
-Deno.serve(async () => {
+Deno.serve(async (req) => {
+  const negado = exigirServico(req);
+  if (negado) return negado;
   const db = admin();
   const agora = new Date();
 
@@ -62,6 +64,7 @@ Deno.serve(async () => {
   if (!fonte) return json({ erro: `fonte desconhecida: ${nomePrincipal}` }, 500);
 
   let novos = 0;
+  let algumOk = false;
   let estadoCircuito = circuito;
   await Promise.all(
     (perfis ?? []).map(async (perfil) => {
@@ -93,6 +96,7 @@ Deno.serve(async () => {
           })),
         });
         if (e) throw new Error(e.message);
+        algumOk = true;
         novos += inseridos?.length ?? 0;
         for (const v of inseridos ?? []) console.log(`🟢 vídeo novo @${perfil.username} ${v.shortcode}`);
       } catch (e) {
@@ -122,8 +126,10 @@ Deno.serve(async () => {
     }),
   );
 
+  // Batimento = último tick com sucesso (nenhum perfil vencido também conta). Sem ele por 2 min → alerta ao admin.
+  const sucesso = algumOk || !perfis?.length;
   await db.from("config").upsert([
-    { chave: "vigiar_batimento", valor: { em: new Date().toISOString(), perfis: perfis?.length ?? 0, fonte: fonte.nome } },
+    ...(sucesso ? [{ chave: "vigiar_batimento", valor: { em: new Date().toISOString(), perfis: perfis?.length ?? 0, fonte: fonte.nome } }] : []),
     { chave: `circuito:${nomePrincipal}`, valor: estadoCircuito },
     { chave: "orcamento_estado", valor: orcamento },
   ]);

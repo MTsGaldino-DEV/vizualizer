@@ -32,3 +32,6 @@
 | 28 | Não baixar modelos do Ollama nem whisper.cpp | `ollama pull` / baixar binário | Gravariam fora da pasta do projeto (limite rígido); worker funciona sem eles |
 | 29 | Texto com `qwen3:8b` (`think:false`) | outro modelo | Único instalado; resumo coerente em 3–4 s com modelo quente |
 | 30 | Tarefa agendada do worker só como script (`scripts/worker-ia-tarefa.ps1`), não registrada | registrar | Alteraria o sistema fora do projeto |
+| 31 | Edge Functions exigem a service key (`exigirServico`) | só verify_jwt | A anon key é pública; com ela qualquer um chamaria `vigiar` e queimaria orçamento |
+| 32 | Aviso de "robô parado" vai direto (sem fila) a todos os dispositivos | tabela de alertas de sistema | `notificacoes.video_id` é obrigatório; aviso de sistema é raro |
+| 33 | Teste de carga "24 h" = 864 rodadas reais (2 ticks concorrentes cada) + 24 h de agendamento em relógio virtual | rodar 24 h de verdade | Exigência de versão acelerada |

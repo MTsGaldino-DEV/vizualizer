@@ -6,7 +6,16 @@ export const admin = () =>
     auth: { persistSession: false },
   });
 
-export const json = (dados: unknown, status = 200) =>
+/**
+ * As funções do robô só aceitam a chave de serviço (pg_cron, worker, scripts). A anon key é pública
+ * (vai no painel) e, com verify_jwt, já bastaria para chamar a função e queimar orçamento da fonte.
+ */
+export function exigirServico(req: Request): Response | null {
+  const token = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  return token && token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ? null : json({ erro: "não autorizado" }, 401);
+}
+
+export const json =(dados: unknown, status = 200) =>
   new Response(JSON.stringify(dados), { status, headers: { "content-type": "application/json" } });
 
 /** Dispara outra função sem esperar (o alerta nunca espera download nem IA). */

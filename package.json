@@ -12,7 +12,8 @@
     "test:integracao": "vitest run --mode integracao scripts/integracao.test.ts",
     "criar-usuario": "tsx scripts/criar-usuario.ts",
     "dev": "pnpm --filter @vizualizer/painel dev",
-    "telas": "tsx scripts/telas.ts"
+    "telas": "tsx scripts/telas.ts",
+    "carga": "tsx scripts/carga.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
