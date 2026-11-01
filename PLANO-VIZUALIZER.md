@@ -519,6 +519,8 @@ C:\APPWEB\Vizualizer
 | 2026-11-01 | 5 | Texto: `qwen3:8b` na RX 7600 (ROCm). Visão e whisper.cpp pendentes | Únicos recursos instalados; ver `docs/benchmark-ia.md` |
 | 2026-11-01 | 6 | Heartbeat com aviso ao admin; teste de carga acelerado aprovado | `docs/carga.md`, `docs/seguranca.md` |
 | 2026-11-01 | 7 | Deploy **não** executado; runbook e checklist prontos | Regra do modo noturno; `docs/runbook.md` |
+| 2026-11-01 | 5 | Worker usa `gemma3:4b` para visão e texto; resumo de Reel real em ~9 s (quente) / 32 s (frio) | `docs/benchmark-ia.md` |
+| 2026-11-01 | 0 | ScrapeCreators validada com 1 chamada real: 12 posts em ~12 s; frescor ainda não medido | `fixtures/ig/scrapecreators-instagram.json` |
 
 ---
 

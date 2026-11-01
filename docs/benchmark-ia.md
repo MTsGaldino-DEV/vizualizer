@@ -19,3 +19,18 @@ Observação de qualidade: no caso do treino o modelo atribuiu "3 séries de 15"
 - **Visão: nenhum** — não há modelo multimodal instalado. **Bloqueio B3.** Baixar um modelo cria arquivos fora da pasta do projeto (proibido esta noite). Sugestão para a manhã: testar 2 modelos de visão que caibam em 8 GB da biblioteca atual do Ollama e rodar este benchmark com `OLLAMA_MODELO_VISAO`.
 - **Transcrição: desligada** — whisper.cpp não instalado. **Bloqueio B4.** Precisa do binário com Vulkan (`whisper-cli`) e de um modelo ggml (`small`/`medium`) em `WHISPER_CLI`/`WHISPER_MODELO`.
 - Segundo modelo de texto para comparação: não instalado (mesmo motivo).
+
+## Atualização — visão com `gemma3:4b` (2026-11-01, dia)
+
+Vídeo: Reel real de 24 s do @instagram (`DfISRt1vadT`), 5 quadros, sem transcrição (whisper ainda desligado). Comando: `tsx src/benchmark-visao.ts`.
+
+| Combinação | Visão | Texto | Total (frio, inclui carregar modelo) |
+|---|---|---|---|
+| A: `gemma3:4b` visão + `qwen3:8b` texto | 36,0 s | 34,9 s | 71,0 s |
+| **B: `gemma3:4b` para tudo** | 26,9 s | 22,3 s | **49,2 s** |
+
+Ponta a ponta no worker (`pnpm simular --esperar-resumo` com o Reel real): **32 s** com modelo frio, **~9 s** com o modelo já carregado.
+
+Resumo gerado (B, ponta a ponta): "Um criador demonstra o processo de criação de uma peça de roupa temática de Halloween, utilizando tecido preto com pregas e detalhes em branco… Ele utiliza ferramentas como tesoura e agulha para criar os desenhos e, por fim, veste a peça finalizada."
+
+**Escolha: `gemma3:4b` para visão e texto.** Mais rápido, um só modelo na VRAM (3,4 GB), sem troca de modelo; o worker mantém o modelo carregado entre visão e texto quando é o mesmo. As duas combinações variam em detalhes pequenos (ex.: "arroz" x "grânulos") — sem a fala transcrita, a descrição depende só dos quadros.

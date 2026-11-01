@@ -73,7 +73,8 @@ export function criarMotorOllama(cfg: {
       if (!cfg.modeloVisao || !jpegs.length) return null;
       const r = await chat({
         model: cfg.modeloVisao,
-        keep_alive: 0, // libera a VRAM antes do modelo de texto
+        // Modelos diferentes: libera a VRAM antes do de texto. Mesmo modelo: mantém carregado para o resumo.
+        keep_alive: cfg.modeloVisao === cfg.modeloTexto ? "60s" : 0,
         messages: [
           {
             role: "user",

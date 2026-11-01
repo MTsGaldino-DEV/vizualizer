@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { motorMock, validarResumo, type MotorIA } from "./ia";
+import { criarMotorOllama, motorMock, validarResumo, type MotorIA } from "./ia";
 import { instantesQuadros } from "./midia";
 import { processarProximo, type Repositorio } from "./pipeline";
 
@@ -72,6 +72,25 @@ describe("validarResumo", () => {
     });
     expect(() => validarResumo('{"resumo":"A"}')).toThrow();
     expect(() => validarResumo("não é json")).toThrow();
+  });
+});
+
+describe("criarMotorOllama — VRAM", () => {
+  const corpos: { model: string; keep_alive: unknown }[] = [];
+  const f = (async (_url: string, init?: RequestInit) => {
+    corpos.push(JSON.parse(String(init?.body)));
+    return new Response(JSON.stringify({ message: { content: "quadros descritos" } }));
+  }) as unknown as typeof fetch;
+
+  it("modelos diferentes: descarrega a visão logo após usar (libera VRAM para o texto)", async () => {
+    corpos.length = 0;
+    await criarMotorOllama({ url: "http://o", modeloVisao: "gemma3:4b", modeloTexto: "qwen3:8b", f }).descreverQuadros([Buffer.from("x")]);
+    expect(corpos[0]).toMatchObject({ model: "gemma3:4b", keep_alive: 0 });
+  });
+  it("mesmo modelo para visão e texto: mantém carregado (não recarrega à toa)", async () => {
+    corpos.length = 0;
+    await criarMotorOllama({ url: "http://o", modeloVisao: "gemma3:4b", modeloTexto: "gemma3:4b", f }).descreverQuadros([Buffer.from("x")]);
+    expect(corpos[0]).toMatchObject({ model: "gemma3:4b", keep_alive: "60s" });
   });
 });
 

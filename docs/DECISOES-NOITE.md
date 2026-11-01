@@ -41,3 +41,5 @@
 | 37 | Botão ganhou tamanhos `marca`/`marca-sm` e variante `tinta`; Input 48 px com fonte 16 px; chips com raio 4 px | usar os padrões do shadcn | Seção 7.1 (botões Bold 16, cantos 14 px, chips 4 px); 16 px evita zoom do iOS |
 | 38 | Servidor MCP do shadcn em `.mcp.json` fixado em `shadcn@4.23.0` com `--cwd apps/painel` | `shadcn@latest` na raiz | Versão reproduzível; o `components.json` está no painel |
 | 39 | `allowBuilds: esbuild` no `pnpm-workspace.yaml` | desligar a checagem de builds | O pnpm 12 abortava instalações (inclusive a do shadcn) por ignorar o build do esbuild; aprova só ele |
+| 40 | `gemma3:4b` para visão **e** texto no worker | `gemma3:4b` + `qwen3:8b` | Pedido do Matheus; 49 s x 71 s a frio, ~9 s quente, um modelo só na VRAM |
+| 41 | Fonte principal do robô continua `mock` mesmo com a chave da ScrapeCreators | ligar já | 1 crédito por checagem: 98 créditos acabam em ~16 min com 1 perfil a 10 s; latência medida ~12 s > tick de 10 s |
