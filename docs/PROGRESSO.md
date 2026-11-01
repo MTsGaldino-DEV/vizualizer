@@ -1,14 +1,16 @@
-# Progresso (modo noturno)
+# Progresso (modo noturno, 2026-11-01)
 
-Ambiente: Node 24, Docker 29 ok, Ollama com `qwen3:8b` (visão não instalada), ffmpeg ok, pnpm e Supabase CLI ausentes, sem `.env`.
+Branch `noite/mvp`. Fases 0 a 6 executadas localmente; a Fase 7 (deploy) ficou só em documentação, como pedido. Relatório completo: `docs/RELATORIO-NOITE.md`.
 
-## Fase 0 — Spike de fontes
-- ✅ Pesquisa de provedores e tabela de custo → `docs/spike-fontes.md`
-- ✅ Fixtures sintéticas → `fixtures/ig/`
-- ❌ Medição real (sem `PROVEDOR_IG_API_KEY`) — bloqueio B1
-- ❌ Aceite p95 frescor ≤ 30 s / latência ≤ 3 s — não verificado
+| Fase | Estado | Próximo passo |
+|---|---|---|
+| 0 | ⚠️ pesquisa + fixtures; medição real pendente | Chave de provedor → rodar o spike de 2 h |
+| 1 | ✅ | — |
+| 2 | ✅ com mock; ❌ perfil real ao vivo | Mesma chave da Fase 0 |
+| 3 | ✅ com canais simulados; ❌ WhatsApp/push reais | `WHATSAPP_NUMERO_TESTE` + Evolution; testar push num celular |
+| 4 | ✅ telas + PWA; ❌ instalação no iPhone/Android não testada | Abrir no celular pela rede local/HTTPS |
+| 5 | ✅ texto com IA real; ❌ visão e transcrição | Instalar modelo de visão e whisper.cpp |
+| 6 | ✅ (carga acelerada, não 24 h reais) | Rodar 24 h com a fonte real |
+| 7 | 📄 só runbook/checklist | Seguir `docs/runbook.md` §6 |
 
-Próximo: Fase 1 (monorepo, `supabase init`, migration `0001_base.sql`).
-
-## Bloqueios
-- B1: chave de provedor de IG (HikerAPI/ScrapeCreators) para medir.
+Ao retomar: `npx supabase start -x vector,logflare,imgproxy,supavisor`, depois `corepack pnpm test` e `corepack pnpm simular`.

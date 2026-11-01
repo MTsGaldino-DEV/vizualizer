@@ -75,7 +75,7 @@ export function useAoVivo<T>(buscar: () => Promise<T>, tabelas: string[]) {
     }
     // Ao (re)conectar, recarrega: eventos perdidos durante a queda não se repetem.
     let primeira = true;
-    canal.subscribe((status) => {
+    canal.subscribe((status: string) => {
       if (status === "SUBSCRIBED" && !primeira) recarregar();
       if (status === "SUBSCRIBED") primeira = false;
       if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setErro("conexão ao vivo caiu, tentando reconectar…");

@@ -5,13 +5,13 @@
   "packageManager": "pnpm@12.16.1",
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json && pnpm --filter @vizualizer/painel typecheck",
+    "typecheck": "tsc -p tsconfig.json && tsc -p apps/painel/tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write .",
     "simular": "tsx scripts/simular.ts",
     "test:integracao": "vitest run --mode integracao scripts/integracao.test.ts",
     "criar-usuario": "tsx scripts/criar-usuario.ts",
-    "dev": "pnpm --filter @vizualizer/painel dev",
+    "dev": "corepack pnpm --filter @vizualizer/painel dev",
     "telas": "tsx scripts/telas.ts",
     "carga": "tsx scripts/carga.ts"
   },

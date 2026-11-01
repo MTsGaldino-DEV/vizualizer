@@ -53,7 +53,7 @@ as $$
       where q.tentativas < 3
         and (q.status = 'pendente' or (q.status = 'processando' and q.pego_em < now() - interval '10 minutes'))
         and (v.storage_path is not null or v.download_tentativas >= 3 or v.url_video is null)
-      order by q.criado_em
+      order by q.criado_em desc  -- mais recente primeiro: com fila acumulada (PC desligado), o vídeo novo não espera os velhos
       limit 1
       for update of q skip locked
    )

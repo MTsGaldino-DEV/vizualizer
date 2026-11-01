@@ -145,6 +145,9 @@ Comando: \`pnpm carga ${RODADAS}\` (Supabase local, fonte mock, cron ligado em p
 `;
   writeFileSync("docs/carga.md", md);
   console.log(md);
+  // Limpa (cascata em videos/jobs/notificações) para não deixar centenas de jobs na fila do worker.
+  await db.from("perfis").delete().like("username", "carga-%");
+  await db.from("config").delete().like("chave", "mock:carga-%");
   process.exit(ok ? 0 : 1);
 }
 

@@ -35,3 +35,5 @@
 | 31 | Edge Functions exigem a service key (`exigirServico`) | só verify_jwt | A anon key é pública; com ela qualquer um chamaria `vigiar` e queimaria orçamento |
 | 32 | Aviso de "robô parado" vai direto (sem fila) a todos os dispositivos | tabela de alertas de sistema | `notificacoes.video_id` é obrigatório; aviso de sistema é raro |
 | 33 | Teste de carga "24 h" = 864 rodadas reais (2 ticks concorrentes cada) + 24 h de agendamento em relógio virtual | rodar 24 h de verdade | Exigência de versão acelerada |
+| 34 | Fila de IA pega o vídeo **mais recente primeiro** | FIFO | Com fila acumulada (PC desligado, carga), o vídeo novo esperava ~290 jobs velhos |
+| 35 | Scripts raiz usam `corepack pnpm`/`tsc` direto | exigir pnpm global | `pnpm` não está no PATH; o typecheck do painel nem rodava pelo script raiz (achado na verificação final) |
