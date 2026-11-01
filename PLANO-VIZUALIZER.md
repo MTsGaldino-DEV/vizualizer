@@ -515,7 +515,7 @@ C:\APPWEB\Vizualizer
 | 2026-11-01 | 1 | Supabase local nas portas 564xx; regras puras em `supabase/functions/_shared/regras` reexportadas por `packages/shared` | Conflito de porta no Docker; Edge runtime só enxerga `supabase/functions` |
 | 2026-11-01 | 2 | Dedupe + enfileiramento numa única RPC `registrar_posts`; perfis arrendados por 60 s | Idempotência atômica com ticks sobrepostos (teste de carga: 0 duplicatas) |
 | 2026-11-01 | 3 | Funções só aceitam a service key; WhatsApp travado em `WHATSAPP_NUMERO_TESTE` | Anon key é pública; evitar envio acidental |
-| 2026-11-01 | 4 | Painel sem shadcn (componentes próprios da marca); radar como elemento central | shadcn-ui MCP indisponível; poucos componentes |
+| 2026-11-01 | 4 | Painel com shadcn/ui customizado à marca (tokens `--viz-*` nas variáveis semânticas); radar como elemento central. MCP do shadcn em `.mcp.json` | Na noite o MCP faltou e os componentes foram à mão; integrado no mesmo dia |
 | 2026-11-01 | 5 | Texto: `qwen3:8b` na RX 7600 (ROCm). Visão e whisper.cpp pendentes | Únicos recursos instalados; ver `docs/benchmark-ia.md` |
 | 2026-11-01 | 6 | Heartbeat com aviso ao admin; teste de carga acelerado aprovado | `docs/carga.md`, `docs/seguranca.md` |
 | 2026-11-01 | 7 | Deploy **não** executado; runbook e checklist prontos | Regra do modo noturno; `docs/runbook.md` |

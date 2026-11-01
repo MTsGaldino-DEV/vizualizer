@@ -1,5 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Icone } from "@/components/Icone";
 import { Erro } from "@/components/Vazio";
 import { ok, useAoVivo } from "@/lib/dados";
@@ -107,13 +110,13 @@ export default function Alertas() {
                   {!d.ativo && " · desligado"}
                 </span>
               </span>
-              <button type="button" onClick={() => testar(d)} disabled={!d.ativo} className="rounded-[10px] border border-borda px-3 py-1.5 text-sm font-bold disabled:opacity-40">
+              <Button variant="outline" size="marca-sm" onClick={() => testar(d)} disabled={!d.ativo}>
                 Enviar teste
-              </button>
+              </Button>
               {d.usuario_id !== null && (
-                <button type="button" onClick={() => alternar(d)} className="px-2 py-1.5 text-sm text-mudo hover:text-texto">
+                <Button variant="ghost" size="marca-sm" onClick={() => alternar(d)} className="text-mudo">
                   {d.ativo ? "Desligar" : "Religar"}
-                </button>
+                </Button>
               )}
             </li>
           ))}
@@ -121,13 +124,13 @@ export default function Alertas() {
         </ul>
 
         <div className="flex flex-col gap-3 pt-2 md:flex-row">
-          <button type="button" onClick={ativarPush} className="rounded-[14px] bg-sinal px-5 py-3 font-bold text-tinta">
+          <Button size="marca" onClick={ativarPush}>
             Ativar push neste aparelho
-          </button>
+          </Button>
           <form onSubmit={adicionarWhatsApp} className="flex flex-1 flex-col gap-2 sm:flex-row">
-            <label htmlFor="wpp" className="sr-only">Número de WhatsApp</label>
-            <input id="wpp" inputMode="tel" value={numero} onChange={(e) => setNumero(e.target.value)} placeholder="55 11 99999-0000" className="min-w-0 flex-1 rounded-[14px] border border-borda bg-sup-2 px-4 py-3 font-mono" />
-            <button className="rounded-[14px] border border-borda px-4 py-3 font-bold">Adicionar WhatsApp</button>
+            <Label htmlFor="wpp" className="sr-only">Número de WhatsApp</Label>
+            <Input id="wpp" inputMode="tel" value={numero} onChange={(e) => setNumero(e.target.value)} placeholder="55 11 99999-0000" className="flex-1 font-mono" />
+            <Button type="submit" variant="outline" size="marca">Adicionar WhatsApp</Button>
           </form>
         </div>
       </section>

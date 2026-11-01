@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* As cores vêm de @vizualizer/tokens (injetadas como --viz-* no <html> pelo layout). */
 @theme inline {
@@ -21,6 +25,45 @@
 
   --radius-card: 18px;
   --radius-chip: 4px;
+  --font-heading: var(--fonte-syne), sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 html {
@@ -94,4 +137,53 @@ body {
 /* Dentro de superfícies lima, o anel de foco lima sumiria: usa a tinta. */
 .bg-sinal :focus-visible {
   outline-color: var(--viz-tinta);
+}
+
+/* ---------- shadcn/ui: variáveis semânticas apontando para os tokens da marca ----------
+   Só existe o tema escuro (seção 7.1), então não há bloco .dark. */
+:root {
+  --radius: 14px;
+  --background: var(--viz-tinta);
+  --foreground: var(--viz-texto);
+  --card: var(--viz-superficie-2);
+  --card-foreground: var(--viz-texto);
+  --popover: var(--viz-superficie-2);
+  --popover-foreground: var(--viz-texto);
+  --primary: var(--viz-sinal);
+  --primary-foreground: var(--viz-tinta);
+  --secondary: var(--viz-superficie-3);
+  --secondary-foreground: var(--viz-texto);
+  --muted: var(--viz-superficie-1);
+  --muted-foreground: var(--viz-texto-mudo);
+  --accent: var(--viz-superficie-3);
+  --accent-foreground: var(--viz-texto);
+  --destructive: var(--viz-alerta);
+  --border: var(--viz-borda);
+  --input: var(--viz-borda);
+  --ring: var(--viz-sinal);
+  --chart-1: var(--viz-sinal);
+  --chart-2: var(--viz-creme);
+  --chart-3: var(--viz-texto-2);
+  --chart-4: var(--viz-alerta);
+  --chart-5: var(--viz-texto-mudo);
+  --sidebar: var(--viz-tinta);
+  --sidebar-foreground: var(--viz-texto);
+  --sidebar-primary: var(--viz-sinal);
+  --sidebar-primary-foreground: var(--viz-tinta);
+  --sidebar-accent: var(--viz-superficie-2);
+  --sidebar-accent-foreground: var(--viz-texto);
+  --sidebar-border: var(--viz-borda);
+  --sidebar-ring: var(--viz-sinal);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

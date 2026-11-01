@@ -25,7 +25,7 @@
 | 21 | Posts malformados descartados antes do RPC (`separarValidos`) | — | Revisão: 1 post ruim fazia rollback do lote e travava alertas do perfil |
 | 22 | Circuit breaker com estado em `config` sem controle de concorrência | RPC atômica | Aceitável no MVP (ticks raramente se sobrepõem); revisitar na Fase 6 |
 | 23 | Testes de integração só com `pnpm test:integracao` | rodar sempre | Criam linhas no banco local e podem disparar o notificar do cron |
-| 24 | Sem shadcn/ui: componentes à mão com Tailwind | shadcn CLI | shadcn-ui MCP e skills design-taste/awwwards/vercel-best-practices não existem nesta máquina; poucos componentes, todos da marca |
+| 24 | ~~Sem shadcn/ui~~ **Revisto em 2026-11-01 (dia):** shadcn/ui integrado (ver #36) | — | Na noite o MCP do shadcn não estava disponível |
 | 25 | Chaves VAPID geradas localmente (web-push CLI) em `.env` ignorados | não gerar | Não é serviço externo; permite testar push de verdade no local |
 | 26 | `[auth.email] enable_signup` fica `true` (o global é `false`) | ambos false | O flag de e-mail desliga o login por e-mail inteiro (achado ao testar) |
 | 27 | Screenshots com Playwright usando o Chrome instalado (`channel: chrome`) | baixar Chromium | Download iria para fora da pasta do projeto |
@@ -37,3 +37,7 @@
 | 33 | Teste de carga "24 h" = 864 rodadas reais (2 ticks concorrentes cada) + 24 h de agendamento em relógio virtual | rodar 24 h de verdade | Exigência de versão acelerada |
 | 34 | Fila de IA pega o vídeo **mais recente primeiro** | FIFO | Com fila acumulada (PC desligado, carga), o vídeo novo esperava ~290 jobs velhos |
 | 35 | Scripts raiz usam `corepack pnpm`/`tsc` direto | exigir pnpm global | `pnpm` não está no PATH; o typecheck do painel nem rodava pelo script raiz (achado na verificação final) |
+| 36 | shadcn/ui (`radix-nova`) no painel; variáveis semânticas (`--primary`, `--ring`…) apontam para os tokens `--viz-*`; só tema escuro (classe `dark` fixa) | tema neutro padrão | Fidelidade à seção 7.1; componentes são código nosso, customizados à marca |
+| 37 | Botão ganhou tamanhos `marca`/`marca-sm` e variante `tinta`; Input 48 px com fonte 16 px; chips com raio 4 px | usar os padrões do shadcn | Seção 7.1 (botões Bold 16, cantos 14 px, chips 4 px); 16 px evita zoom do iOS |
+| 38 | Servidor MCP do shadcn em `.mcp.json` fixado em `shadcn@4.23.0` com `--cwd apps/painel` | `shadcn@latest` na raiz | Versão reproduzível; o `components.json` está no painel |
+| 39 | `allowBuilds: esbuild` no `pnpm-workspace.yaml` | desligar a checagem de builds | O pnpm 12 abortava instalações (inclusive a do shadcn) por ignorar o build do esbuild; aprova só ele |

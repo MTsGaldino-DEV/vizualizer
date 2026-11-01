@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase/client";
 
 export default function Login() {
@@ -43,26 +46,21 @@ export default function Login() {
           </div>
         ) : (
           <form onSubmit={enviar} className="mt-10 space-y-3">
-            <label htmlFor="email" className="block text-sm font-medium text-texto-2">
+            <Label htmlFor="email" className="text-texto-2">
               E-mail
-            </label>
-            <input
+            </Label>
+            <Input
               id="email"
               type="email"
               required
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-[14px] border border-borda bg-sup-2 px-4 py-3 text-texto placeholder:text-mudo"
               placeholder="voce@exemplo.com"
             />
-            <button
-              type="submit"
-              disabled={estado === "enviando"}
-              className="w-full rounded-[14px] bg-sinal px-5 py-3 text-[16px] font-bold text-tinta disabled:opacity-60"
-            >
+            <Button type="submit" size="marca" className="w-full" disabled={estado === "enviando"}>
               {estado === "enviando" ? "Enviando…" : "Receber link de acesso"}
-            </button>
+            </Button>
             {erro && (
               <p role="alert" className="text-sm text-alerta">
                 {erro}

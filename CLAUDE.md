@@ -53,3 +53,4 @@ Usar exatamente estes (PowerShell). Preencher conforme a Fase 1 criar o monorepo
 - O alerta **nunca espera** download nem IA: detectar → alertar → baixar → resumir.
 - Nunca usar login automatizado no Instagram (instagrapi etc.).
 - Identidade visual: tokens da seção 7.1 do plano; não redesenhar o mascote à mão (usar `assets/marca/`).
+- UI do painel: componentes shadcn/ui em `apps/painel/components/ui/` (adicionar com `npx shadcn@4.23.0 add <nome>` dentro de `apps/painel`). As variáveis do shadcn em `globals.css` apontam para os tokens `--viz-*`; não trocar por cores soltas. Botões da marca: `size="marca"`; dentro do card lima: `variant="tinta"`.

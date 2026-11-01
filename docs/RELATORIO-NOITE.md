@@ -50,7 +50,7 @@ A lista completa, com alternativas, está em `docs/DECISOES-NOITE.md` (35 itens)
 4. **WhatsApp com trava:** só envia para `WHATSAPP_NUMERO_TESTE`. Qualquer outro número fica simulado.
 5. **Alerta não espera o download.** Se o vídeo ainda não baixou, a 1ª mensagem sai sem link "Baixar"; o link vai sempre na 2ª (resumo). A seção 6.1 pedia o link já na mensagem 1.
 6. **Fila de IA pega o vídeo mais recente primeiro**, não FIFO.
-7. **Painel sem shadcn/ui.** O MCP e as skills de design citadas no prompt não existem nesta máquina; os componentes são da marca, feitos à mão.
+7. **Painel sem shadcn/ui** (revisto no dia seguinte: shadcn/ui integrado e customizado à marca, MCP em `.mcp.json`; ver decisões #36–#39).
 8. **Perfil Econômico = 24 h a 300 s** na tabela de custo.
 9. **Supabase local nas portas 564xx**, não 543xx. O Docker recusou a 54323.
 10. **Migrations editadas várias vezes durante a noite.** Nunca foram aplicadas fora do local, então dá para revisar como versão única.

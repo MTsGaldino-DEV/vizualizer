@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { CardDestaque } from "@/components/CardDestaque";
 import { Radar } from "@/components/Radar";
 import { Erro, Vazio } from "@/components/Vazio";
@@ -54,9 +55,9 @@ export default function AoVivo() {
           texto="Assim que um dos perfis postar um vídeo, ele aparece aqui em segundos."
           acao={
             dados.perfis.length === 0 ? (
-              <Link href="/perfis" className="mt-2 rounded-[14px] bg-sinal px-5 py-2.5 font-bold text-tinta">
-                Adicionar perfil
-              </Link>
+              <Button asChild size="marca" className="mt-2">
+                <Link href="/perfis">Adicionar perfil</Link>
+              </Button>
             ) : undefined
           }
         />

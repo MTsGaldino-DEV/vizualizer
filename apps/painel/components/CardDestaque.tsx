@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { linkDownload, statusJob, type Video } from "@/lib/dados";
 import { haQuanto, segundos } from "@/lib/tempo";
 
@@ -37,9 +39,9 @@ export function CardDestaque({ video, agora }: { video: Video; agora: number }) 
             {!!video.resumo_tags?.length && (
               <p className="mt-2 flex flex-wrap gap-1.5">
                 {video.resumo_tags.map((t) => (
-                  <span key={t} className="rounded-[4px] bg-tinta/10 px-1.5 py-0.5 font-mono text-[12px]">
+                  <Badge key={t} className="bg-tinta/10 font-mono text-[12px] font-normal text-tinta">
                     #{t}
-                  </span>
+                  </Badge>
                 ))}
               </p>
             )}
@@ -56,17 +58,12 @@ export function CardDestaque({ video, agora }: { video: Video; agora: number }) 
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          onClick={baixar}
-          disabled={!video.storage_path}
-          className="rounded-[14px] bg-tinta px-5 py-3 text-[16px] font-bold text-sinal transition-opacity disabled:opacity-50"
-        >
+        <Button variant="tinta" size="marca" onClick={baixar} disabled={!video.storage_path}>
           {video.storage_path ? "Baixar e repostar" : "Preparando o download…"}
-        </button>
-        <Link href={`/video/${video.id}`} className="rounded-[14px] px-4 py-3 text-[15px] font-bold underline-offset-4 hover:underline">
-          Ver detalhes
-        </Link>
+        </Button>
+        <Button asChild variant="link" size="marca" className="text-tinta">
+          <Link href={`/video/${video.id}`}>Ver detalhes</Link>
+        </Button>
       </div>
       {erro && <p role="alert" className="mt-3 text-sm font-medium">Não deu para gerar o link: {erro}</p>}
     </article>

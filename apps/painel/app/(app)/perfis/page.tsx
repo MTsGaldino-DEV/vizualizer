@@ -1,5 +1,8 @@
 "use client";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Erro, Vazio } from "@/components/Vazio";
 import { ok, useAoVivo, type Perfil } from "@/lib/dados";
 import { supabase } from "@/lib/supabase/client";
@@ -49,15 +52,15 @@ export default function Perfis() {
       </div>
 
       <form onSubmit={adicionar} className="flex flex-col gap-2 sm:flex-row">
-        <label htmlFor="novo" className="sr-only">Usuário do Instagram</label>
-        <input
+        <Label htmlFor="novo" className="sr-only">Usuário do Instagram</Label>
+        <Input
           id="novo"
           value={novo}
           onChange={(e) => setNovo(e.target.value)}
           placeholder="@usuario"
-          className="flex-1 rounded-[14px] border border-borda bg-sup-2 px-4 py-3 font-mono"
+          className="flex-1 font-mono"
         />
-        <button className="rounded-[14px] bg-sinal px-5 py-3 font-bold text-tinta">Adicionar perfil</button>
+        <Button type="submit" size="marca">Adicionar perfil</Button>
       </form>
       {msg && <p role="status" className="text-sm text-texto-2">{msg}</p>}
       {erro && <Erro mensagem={erro} />}

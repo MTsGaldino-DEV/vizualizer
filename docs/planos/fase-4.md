@@ -1,6 +1,6 @@
 # Fase 4 — Painel: Plano
 
-> Spec: PLANO-VIZUALIZER.md seção 7. Skills: frontend-design (+ motion por CSS). Ausentes nesta máquina: design-taste-frontend, build-awwwards-quality-sites, vercel-react-best-practices, shadcn-ui MCP (registrado em DECISOES-NOITE).
+> Spec: PLANO-VIZUALIZER.md seção 7. Skills: frontend-design (+ motion por CSS). Ausentes nesta máquina: design-taste-frontend, build-awwwards-quality-sites, vercel-react-best-practices. shadcn/ui integrado depois (decisões #36–#39).
 
 **Design:** marca fixada pela 7.1 (tinta + lima, Syne/DM Sans/JetBrains Mono). Um elemento marcante: o **radar** (cada perfil é um ponto; acende em lima com vídeo < 2 min). Resto quieto. Mobile-first (PWA), trilho lateral no desktop.
 

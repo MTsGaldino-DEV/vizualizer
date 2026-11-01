@@ -1,5 +1,8 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { Erro, Vazio } from "@/components/Vazio";
 import { linkDownload, ok, SELECT_VIDEO, statusJob, useAoVivo, type Video } from "@/lib/dados";
@@ -43,16 +46,16 @@ export default function DetalheVideo() {
     if (error) setAcaoErro(error.message);
   }
 
-  if (carregando) return <div role="status" className="skeleton h-96 rounded-[22px] bg-sup-2" aria-label="Carregando vídeo" />;
+  if (carregando) return <Skeleton role="status" className="h-96 rounded-[22px]" aria-label="Carregando vídeo" />;
   if (erro && !video) return <Erro mensagem={erro} />;
   if (!video) return <Vazio titulo="Vídeo não encontrado" texto="Ele pode ter sido removido." />;
   const job = statusJob(video);
 
   return (
     <div className="space-y-8">
-      <button type="button" onClick={() => router.back()} className="text-sm text-texto-2 hover:text-texto">
+      <Button variant="ghost" size="sm" onClick={() => router.back()} className="text-texto-2">
         ← Voltar
-      </button>
+      </Button>
       <div className="grid gap-8 md:grid-cols-[minmax(0,360px)_1fr]">
         <div className="overflow-hidden rounded-[22px] border border-borda bg-sup-1">
           {src ? (
@@ -98,9 +101,9 @@ export default function DetalheVideo() {
             {!!video.resumo_tags?.length && (
               <p className="mt-3 flex flex-wrap gap-1.5">
                 {video.resumo_tags.map((t) => (
-                  <span key={t} className="rounded-[4px] border border-borda px-1.5 py-0.5 font-mono text-[12px] text-texto-2">
+                  <Badge key={t} variant="outline" className="font-mono text-[12px] font-normal text-texto-2">
                     #{t}
-                  </span>
+                  </Badge>
                 ))}
               </p>
             )}
@@ -114,23 +117,20 @@ export default function DetalheVideo() {
           )}
 
           <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={baixar}
-              disabled={!video.storage_path}
-              className="rounded-[14px] bg-sinal px-5 py-3 font-bold text-tinta disabled:opacity-50"
-            >
+            <Button size="marca" onClick={baixar} disabled={!video.storage_path}>
               {video.storage_path ? "Baixar" : "Preparando o download…"}
-            </button>
-            <a href={video.permalink} target="_blank" rel="noreferrer" className="rounded-[14px] border border-borda px-5 py-3 font-bold">
-              Abrir no Instagram
-            </a>
-            <button type="button" onClick={() => marcar("repostado")} className="rounded-[14px] border border-borda px-5 py-3 font-bold">
+            </Button>
+            <Button asChild variant="outline" size="marca">
+              <a href={video.permalink} target="_blank" rel="noreferrer">
+                Abrir no Instagram
+              </a>
+            </Button>
+            <Button variant="outline" size="marca" onClick={() => marcar("repostado")}>
               Marcar como repostado
-            </button>
-            <button type="button" onClick={() => marcar("ignorado")} className="rounded-[14px] px-5 py-3 font-bold text-mudo hover:text-texto">
+            </Button>
+            <Button variant="ghost" size="marca" onClick={() => marcar("ignorado")} className="text-mudo">
               Ignorar
-            </button>
+            </Button>
           </div>
           {acaoErro && <p role="alert" className="text-sm text-alerta">Não foi possível salvar: {acaoErro}</p>}
         </div>
