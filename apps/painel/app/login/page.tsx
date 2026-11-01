@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/lib/supabase/client";
 
@@ -7,6 +7,11 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [estado, setEstado] = useState<"livre" | "enviando" | "enviado">("livre");
   const [erro, setErro] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("erro") === "link")
+      setErro("Este link de acesso é inválido ou expirou. Peça um novo abaixo.");
+  }, []);
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();

@@ -33,3 +33,6 @@ grant execute on function testar_dispositivo(uuid) to authenticated;
 -- Painel também lista dispositivos do sistema (WhatsApp de teste, usuario_id nulo).
 create policy "autenticado lê dispositivos do sistema" on dispositivos for select to authenticated
   using (usuario_id is null);
+
+-- Telas Alertas e Saúde também reagem a mudanças nessas tabelas.
+alter publication supabase_realtime add table dispositivos, checagens;

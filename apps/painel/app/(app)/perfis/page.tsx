@@ -117,7 +117,11 @@ function CartaoPerfil({ perfil: p, horas, agora, aoMudar }: { perfil: Perfil; ho
               </label>
               <button
                 type="button"
-                onClick={() => salvar({ intervalo_quente_s: Math.max(5, quente), intervalo_frio_s: Math.max(30, frio) })}
+                onClick={() =>
+                  Number.isFinite(quente) && Number.isFinite(frio) && quente > 0 && frio > 0
+                    ? salvar({ intervalo_quente_s: Math.max(5, Math.round(quente)), intervalo_frio_s: Math.max(30, Math.round(frio)) })
+                    : setErro("Preencha os dois intervalos com números em segundos.")
+                }
                 className="rounded-[10px] bg-texto px-3 py-2 text-sm font-bold text-tinta"
               >
                 Salvar intervalos

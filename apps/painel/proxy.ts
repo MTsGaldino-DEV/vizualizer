@@ -22,7 +22,9 @@ export async function proxy(request: NextRequest) {
   if (!data?.claims && !p.startsWith("/login") && !p.startsWith("/auth")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
+    const redirect = NextResponse.redirect(url);
+    for (const c of resposta.cookies.getAll()) redirect.cookies.set(c); // não perde renovação de sessão
+    return redirect;
   }
   return resposta;
 }

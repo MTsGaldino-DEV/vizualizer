@@ -90,3 +90,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .radar-varredura, .radar-anel, .ponto-aceso, .card-novo, .skeleton { animation: none !important; }
 }
+
+/* Dentro de superfícies lima, o anel de foco lima sumiria: usa a tinta. */
+.bg-sinal :focus-visible {
+  outline-color: var(--viz-tinta);
+}

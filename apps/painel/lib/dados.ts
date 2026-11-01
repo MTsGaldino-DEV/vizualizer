@@ -47,6 +47,7 @@ export const SELECT_VIDEO = "*, perfis(username), jobs_ia(status)";
 export function useAoVivo<T>(buscar: () => Promise<T>, tabelas: string[]) {
   const [dados, setDados] = useState<T | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const [carregando, setCarregando] = useState(true);
   const ref = useRef(buscar);
   ref.current = buscar;
   const chave = tabelas.join(",");
@@ -57,6 +58,8 @@ export function useAoVivo<T>(buscar: () => Promise<T>, tabelas: string[]) {
       setErro(null);
     } catch (e) {
       setErro(e instanceof Error ? e.message : String(e));
+    } finally {
+      setCarregando(false);
     }
   }, []);
 
@@ -70,14 +73,20 @@ export function useAoVivo<T>(buscar: () => Promise<T>, tabelas: string[]) {
         t = setTimeout(recarregar, 250);
       });
     }
-    canal.subscribe();
+    // Ao (re)conectar, recarrega: eventos perdidos durante a queda não se repetem.
+    let primeira = true;
+    canal.subscribe((status) => {
+      if (status === "SUBSCRIBED" && !primeira) recarregar();
+      if (status === "SUBSCRIBED") primeira = false;
+      if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setErro("conexão ao vivo caiu, tentando reconectar…");
+    });
     return () => {
       clearTimeout(t);
       supabase().removeChannel(canal);
     };
   }, [chave, recarregar]);
 
-  return { dados, erro, recarregar };
+  return { dados, erro, carregando, recarregar };
 }
 
 /** Lança o erro do Supabase em vez de devolver dados vazios em silêncio. */

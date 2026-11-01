@@ -47,9 +47,14 @@ export default function Alertas() {
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64ParaUint8(VAPID) });
       const { data: u } = await supabase().auth.getUser();
-      const { error } = await supabase().from("dispositivos").insert({ usuario_id: u.user!.id, tipo: "web_push", destino: sub.toJSON() });
+      if (!u.user) throw new Error("sessão expirada, entre de novo");
+      // subscribe() devolve a mesma assinatura em cliques repetidos: não duplicar o dispositivo.
+      const jaExiste = dados?.find((d) => d.tipo === "web_push" && d.destino.endpoint === sub.endpoint);
+      const { error } = jaExiste
+        ? await supabase().from("dispositivos").update({ ativo: true }).eq("id", jaExiste.id)
+        : await supabase().from("dispositivos").insert({ usuario_id: u.user.id, tipo: "web_push", destino: sub.toJSON() });
       if (error) throw new Error(error.message);
-      setMsg("Push ativado neste aparelho.");
+      setMsg(jaExiste ? "Push já estava ativo neste aparelho." : "Push ativado neste aparelho.");
       recarregar();
     } catch (e) {
       setMsg(`Não foi possível ativar o push: ${e instanceof Error ? e.message : e}`);
@@ -61,8 +66,10 @@ export default function Alertas() {
     const n = numero.replace(/\D/g, "");
     if (n.length < 12) return setMsg("Informe o número com DDI e DDD, ex.: 55 11 99999-0000.");
     const { data: u } = await supabase().auth.getUser();
-    const { error } = await supabase().from("dispositivos").insert({ usuario_id: u.user!.id, tipo: "whatsapp", destino: { numero: n } });
-    setMsg(error ? error.message : "WhatsApp adicionado.");
+    if (!u.user) return setMsg("Sessão expirada, entre de novo.");
+    const { error } = await supabase().from("dispositivos").insert({ usuario_id: u.user.id, tipo: "whatsapp", destino: { numero: n } });
+    if (error) return setMsg(`WhatsApp não adicionado: ${error.message}`);
+    setMsg("WhatsApp adicionado.");
     setNumero("");
     recarregar();
   }

@@ -22,18 +22,22 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const alvo = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin);
   // O link do push aponta para URL_PAINEL; reescreve para a origem atual (útil em dev e no PWA).
-  const url = self.location.origin + alvo.pathname;
+  let url = self.location.origin + "/";
+  try {
+    const alvo = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin);
+    url = self.location.origin + alvo.pathname + alvo.search + alvo.hash;
+  } catch {
+    // URL inválida no payload: abre a home.
+  }
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((abas) => {
-      for (const aba of abas) {
-        if ("focus" in aba) {
-          aba.navigate(url);
-          return aba.focus();
-        }
-      }
-      return self.clients.openWindow(url);
+      const aba = abas.find((a) => "navigate" in a && "focus" in a);
+      if (!aba) return self.clients.openWindow(url);
+      return aba
+        .navigate(url)
+        .then((a) => (a || aba).focus())
+        .catch(() => self.clients.openWindow(url));
     }),
   );
 });

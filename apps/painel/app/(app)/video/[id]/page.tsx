@@ -17,7 +17,7 @@ const STATUS: Record<string, string> = {
 export default function DetalheVideo() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { dados: video, erro } = useAoVivo(
+  const { dados: video, erro, carregando } = useAoVivo(
     async () => ok(await supabase().from("videos").select(SELECT_VIDEO).eq("id", id).maybeSingle()) as Video | null,
     ["videos", "jobs_ia"],
   );
@@ -25,17 +25,27 @@ export default function DetalheVideo() {
   const [acaoErro, setAcaoErro] = useState<string | null>(null);
 
   useEffect(() => {
+    setSrc(null);
     if (video?.storage_path) linkDownload(video.storage_path).then(setSrc, () => setSrc(null));
   }, [video?.storage_path]);
+
+  async function baixar() {
+    setAcaoErro(null);
+    try {
+      window.location.href = await linkDownload(video!.storage_path!); // link novo a cada clique
+    } catch (e) {
+      setAcaoErro(e instanceof Error ? e.message : "falha ao gerar o link");
+    }
+  }
 
   async function marcar(status: "repostado" | "ignorado") {
     const { error } = await supabase().from("videos").update({ status }).eq("id", id);
     if (error) setAcaoErro(error.message);
   }
 
-  if (erro) return <Erro mensagem={erro} />;
-  if (video === null) return <Vazio titulo="Vídeo não encontrado" texto="Ele pode ter sido removido." />;
-  if (!video) return <div className="skeleton h-96 rounded-[22px] bg-sup-2" aria-label="Carregando" />;
+  if (carregando) return <div role="status" className="skeleton h-96 rounded-[22px] bg-sup-2" aria-label="Carregando vídeo" />;
+  if (erro && !video) return <Erro mensagem={erro} />;
+  if (!video) return <Vazio titulo="Vídeo não encontrado" texto="Ele pode ter sido removido." />;
   const job = statusJob(video);
 
   return (
@@ -104,13 +114,14 @@ export default function DetalheVideo() {
           )}
 
           <div className="flex flex-wrap gap-3">
-            <a
-              href={src ?? undefined}
-              aria-disabled={!src}
-              className={`rounded-[14px] bg-sinal px-5 py-3 font-bold text-tinta ${src ? "" : "pointer-events-none opacity-50"}`}
+            <button
+              type="button"
+              onClick={baixar}
+              disabled={!video.storage_path}
+              className="rounded-[14px] bg-sinal px-5 py-3 font-bold text-tinta disabled:opacity-50"
             >
-              Baixar
-            </a>
+              {video.storage_path ? "Baixar" : "Preparando o download…"}
+            </button>
             <a href={video.permalink} target="_blank" rel="noreferrer" className="rounded-[14px] border border-borda px-5 py-3 font-bold">
               Abrir no Instagram
             </a>

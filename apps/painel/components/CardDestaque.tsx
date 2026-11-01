@@ -21,7 +21,7 @@ export function CardDestaque({ video, agora }: { video: Video; agora: number }) 
   }
 
   return (
-    <article className="card-novo rounded-[22px] bg-sinal p-6 text-tinta md:p-8" aria-live="polite">
+    <article className="card-novo rounded-[22px] bg-sinal p-6 text-tinta md:p-8">
       <p className="rotulo font-semibold">
         {recente ? "Novo vídeo" : "Último vídeo"} · {haQuanto(video.detectado_em, agora)}
       </p>
@@ -47,10 +47,10 @@ export function CardDestaque({ video, agora }: { video: Video; agora: number }) 
         ) : job === "falhou" ? (
           <p className="text-tinta/70">O resumo não ficou pronto. O vídeo continua disponível para baixar.</p>
         ) : (
-          <div aria-label="Vizu está assistindo o vídeo para resumir" className="space-y-2">
-            <div className="skeleton h-3.5 w-11/12 rounded" />
-            <div className="skeleton h-3.5 w-8/12 rounded" />
-            <p className="pt-1 font-mono text-[12px] text-tinta/70">Vizu está assistindo para resumir…</p>
+          <div className="space-y-2">
+            <div className="skeleton h-3.5 w-11/12 rounded" aria-hidden />
+            <div className="skeleton h-3.5 w-8/12 rounded" aria-hidden />
+            <p role="status" className="pt-1 font-mono text-[12px] text-tinta/70">Vizu está assistindo para resumir…</p>
           </div>
         )}
       </div>
