@@ -5,19 +5,21 @@
   "packageManager": "pnpm@12.16.1",
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json && pnpm --filter @vizualizer/painel typecheck",
     "lint": "eslint .",
     "format": "prettier --write .",
     "simular": "tsx scripts/simular.ts",
     "test:integracao": "vitest run --mode integracao scripts/integracao.test.ts",
     "criar-usuario": "tsx scripts/criar-usuario.ts",
-    "dev": "pnpm --filter @vizualizer/painel dev"
+    "dev": "pnpm --filter @vizualizer/painel dev",
+    "telas": "tsx scripts/telas.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@supabase/supabase-js": "^2.118.0",
     "@types/node": "^22.0.0",
     "eslint": "^9.0.0",
+    "playwright-core": "^1.64.1",
     "prettier": "^3.3.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",

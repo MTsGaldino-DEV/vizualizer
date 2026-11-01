@@ -25,3 +25,7 @@
 | 21 | Posts malformados descartados antes do RPC (`separarValidos`) | — | Revisão: 1 post ruim fazia rollback do lote e travava alertas do perfil |
 | 22 | Circuit breaker com estado em `config` sem controle de concorrência | RPC atômica | Aceitável no MVP (ticks raramente se sobrepõem); revisitar na Fase 6 |
 | 23 | Testes de integração só com `pnpm test:integracao` | rodar sempre | Criam linhas no banco local e podem disparar o notificar do cron |
+| 24 | Sem shadcn/ui: componentes à mão com Tailwind | shadcn CLI | shadcn-ui MCP e skills design-taste/awwwards/vercel-best-practices não existem nesta máquina; poucos componentes, todos da marca |
+| 25 | Chaves VAPID geradas localmente (web-push CLI) em `.env` ignorados | não gerar | Não é serviço externo; permite testar push de verdade no local |
+| 26 | `[auth.email] enable_signup` fica `true` (o global é `false`) | ambos false | O flag de e-mail desliga o login por e-mail inteiro (achado ao testar) |
+| 27 | Screenshots com Playwright usando o Chrome instalado (`channel: chrome`) | baixar Chromium | Download iria para fora da pasta do projeto |

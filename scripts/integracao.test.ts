@@ -8,7 +8,7 @@ beforeAll(async () => {
 });
 
 // Só roda com `pnpm test:integracao` (cria linhas no banco local e pode disparar o notificar do cron).
-describe.runIf(import.meta.env.MODE === "integracao")("banco local", () => {
+describe.runIf((import.meta as unknown as { env: { MODE: string } }).env.MODE === "integracao")("banco local", () => {
   it("ticks concorrentes não duplicam vídeo, notificação nem job (regra 3.2.2)", async (ctx) => {
     if (!noAr) return ctx.skip();
     const username = `conc-${Date.now()}`;

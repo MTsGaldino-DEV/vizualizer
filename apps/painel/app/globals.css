@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* As cores vêm de @vizualizer/tokens (injetadas como --viz-* no <html> pelo layout). */
+@theme inline {
+  --color-tinta: var(--viz-tinta);
+  --color-sup-1: var(--viz-superficie-1);
+  --color-sup-2: var(--viz-superficie-2);
+  --color-sup-3: var(--viz-superficie-3);
+  --color-borda: var(--viz-borda);
+  --color-texto: var(--viz-texto);
+  --color-texto-2: var(--viz-texto-2);
+  --color-mudo: var(--viz-texto-mudo);
+  --color-sinal: var(--viz-sinal);
+  --color-creme: var(--viz-creme);
+  --color-terra: var(--viz-terra);
+  --color-alerta: var(--viz-alerta);
+
+  --font-display: var(--fonte-syne), sans-serif;
+  --font-sans: var(--fonte-dm), system-ui, sans-serif;
+  --font-mono: var(--fonte-mono), ui-monospace, monospace;
+
+  --radius-card: 18px;
+  --radius-chip: 4px;
+}
+
+html {
+  background: var(--viz-tinta);
+  color: var(--viz-texto);
+  color-scheme: dark;
+}
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Rótulo de dados: JetBrains Mono, caixa alta, tracking aberto (seção 7.1). */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid var(--viz-sinal);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ícone da marca como máscara: herda currentColor. */
+.icone {
+  display: inline-block;
+  background-color: currentColor;
+  mask: var(--src) center / contain no-repeat;
+  -webkit-mask: var(--src) center / contain no-repeat;
+}
+
+/* ---------- Motion (7.3): radar, ponto acendendo, card novo ---------- */
+@keyframes varredura {
+  to { transform: rotate(360deg); }
+}
+@keyframes anel {
+  0% { transform: scale(0.4); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes acender {
+  0% { transform: scale(0.2); opacity: 0; }
+  60% { transform: scale(1.6); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes entrar {
+  from { transform: translateY(14px); opacity: 0; box-shadow: 0 0 0 0 rgb(200 255 46 / 0); }
+  60% { box-shadow: 0 0 48px 4px rgb(200 255 46 / 0.35); }
+  to { transform: none; opacity: 1; box-shadow: 0 0 0 0 rgb(200 255 46 / 0); }
+}
+@keyframes brilho-skeleton {
+  to { background-position: -200% 0; }
+}
+
+.radar-varredura { animation: varredura 4s linear infinite; transform-origin: 50% 50%; }
+.radar-anel { animation: anel 2.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+.ponto-aceso { animation: acender 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; transform-origin: center; transform-box: fill-box; }
+.card-novo { animation: entrar 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.skeleton {
+  background: linear-gradient(90deg, rgb(11 11 12 / 0.12) 25%, rgb(11 11 12 / 0.22) 50%, rgb(11 11 12 / 0.12) 75%);
+  background-size: 200% 100%;
+  animation: brilho-skeleton 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-varredura, .radar-anel, .ponto-aceso, .card-novo, .skeleton { animation: none !important; }
+}
