@@ -2,11 +2,12 @@
 // 1. pega perfis vencidos  2. consulta a fonte  3. classifica  4. registra (dedupe no banco)  5. dispara notificar.
 
 import { admin, dispararFuncao, json } from "../_shared/supabase.ts";
-import { classificarPosts } from "../_shared/regras/deteccao.ts";
+import { classificarPosts, separarValidos } from "../_shared/regras/deteccao.ts";
 import {
   avaliarCircuito,
   circuitoAberto,
   fatorOrcamento,
+  intervaloErroS,
   proximoCheck,
   type EstadoCircuito,
   type Janela,
@@ -68,7 +69,8 @@ Deno.serve(async () => {
       let ok = true;
       let erro: string | undefined;
       try {
-        const posts = await fonte.ultimosPosts(perfil.username, LIMITE_POSTS);
+        const { validos: posts, descartados } = separarValidos(await fonte.ultimosPosts(perfil.username, LIMITE_POSTS));
+        for (const d of descartados) console.warn(`@${perfil.username}: post malformado descartado`, JSON.stringify(d));
         const classificados = classificarPosts(posts, {
           baseline: !perfil.baseline_feito,
           monitoradoDesde: new Date(perfil.monitorado_desde),
@@ -101,21 +103,22 @@ Deno.serve(async () => {
       if (!usarReserva) estadoCircuito = avaliarCircuito(estadoCircuito, ok, agora, CIRCUITO);
 
       const janelas = [...(perfil.janelas_manuais as Janela[]), ...(perfil.janelas_aprendidas as Janela[])];
-      await Promise.all([
+      const erros = ok ? 0 : perfil.erros_seguidos + 1;
+      const proximo = ok
+        ? proximoCheck(
+            { intervaloQuenteS: perfil.intervalo_quente_s, intervaloFrioS: perfil.intervalo_frio_s, janelas },
+            new Date(),
+            { fatorFrio: orcamento.fator },
+          )
+        : new Date(Date.now() + intervaloErroS(erros) * 1000);
+      const escritas = await Promise.all([
         db.from("checagens").insert({ perfil_id: perfil.id, fonte: fonte.nome, ok, duracao_ms: Date.now() - t0, erro }),
         db
           .from("perfis")
-          .update({
-            ultimo_check_em: new Date().toISOString(),
-            proximo_check_em: proximoCheck(
-              { intervaloQuenteS: perfil.intervalo_quente_s, intervaloFrioS: perfil.intervalo_frio_s, janelas },
-              new Date(),
-              { fatorFrio: orcamento.fator },
-            ).toISOString(),
-            erros_seguidos: ok ? 0 : perfil.erros_seguidos + 1,
-          })
+          .update({ ultimo_check_em: new Date().toISOString(), proximo_check_em: proximo.toISOString(), erros_seguidos: erros })
           .eq("id", perfil.id),
       ]);
+      for (const w of escritas) if (w.error) console.error(`@${perfil.username}: falha ao gravar checagem/perfil: ${w.error.message}`);
     }),
   );
 

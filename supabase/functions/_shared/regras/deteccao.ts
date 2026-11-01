@@ -44,6 +44,19 @@ function motivoIgnorar(p: PostRegra, ctx: ContextoDeteccao): MotivoIgnorado | un
   return undefined;
 }
 
+/** Um post malformado vindo da fonte não pode derrubar o lote (o RPC daria rollback em todos). */
+export function separarValidos<T extends PostRegra & { permalink: string }>(
+  posts: T[],
+): { validos: T[]; descartados: T[] } {
+  const validos: T[] = [];
+  const descartados: T[] = [];
+  for (const p of posts) {
+    const ok = !!p.shortcode && !!p.permalink && p.publicadoEm instanceof Date && !isNaN(p.publicadoEm.getTime());
+    (ok ? validos : descartados).push(p);
+  }
+  return { validos, descartados };
+}
+
 export function latenciaMs(publicadoEm: Date, detectadoEm: Date): number {
   return Math.max(0, detectadoEm.getTime() - publicadoEm.getTime());
 }

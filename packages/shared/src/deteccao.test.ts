@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classificarPosts, latenciaMs } from "./deteccao";
+import { classificarPosts, latenciaMs, separarValidos } from "./deteccao";
 import type { PostIG } from "./fontes";
 
 const agora = new Date("2026-11-01T15:00:00Z");
@@ -81,6 +81,19 @@ describe("classificarPosts — regras 3.2", () => {
   it("devolve motivo para cada post não alertado", () => {
     const [r] = classificarPosts([post({ tipo: "imagem" })], ctx);
     expect(r?.motivo).toBe("nao_e_video");
+  });
+});
+
+describe("separarValidos", () => {
+  it("post sem shortcode, sem permalink ou com data inválida é descartado sem derrubar os outros", () => {
+    const { validos, descartados } = separarValidos([
+      post({ shortcode: "OK" }),
+      post({ shortcode: "" }),
+      post({ shortcode: "SEMDATA", publicadoEm: new Date("lixo") }),
+      post({ shortcode: "SEMLINK", permalink: "" }),
+    ]);
+    expect(validos.map((p) => p.shortcode)).toEqual(["OK"]);
+    expect(descartados).toHaveLength(3);
   });
 });
 

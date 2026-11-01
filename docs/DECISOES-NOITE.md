@@ -18,3 +18,10 @@
 | 14 | `latencia_ms` virou `bigint` | int | Post fixado antigo estoura int em ms (bug achado no `pnpm simular`) |
 | 15 | Web Push com `npm:web-push@3.6.7` no Deno | lib JSR | Lib madura, conferida no Context7; validar em runtime quando houver VAPID |
 | 16 | Endpoints HikerAPI (`/v1/user/by/username`, `/gql/user/medias`) da doc via Context7, campos não validados | — | Sem chave; TODO no adapter |
+| 17 | Cadastro público desligado no Auth; usuário criado por `pnpm criar-usuario` | signup aberto | Revisão: qualquer cadastro viraria `authenticated` com acesso total |
+| 18 | Painel só pode alterar `videos.status` (privilégio por coluna) | RPC | Revisão: evita SSRF via `url_video` no baixar-video |
+| 19 | Fila de download com `pegar_downloads` (SKIP LOCKED + arrendamento 2 min) | — | Revisão: cron e disparo do vigiar baixavam em dobro |
+| 20 | Erro de fonte → backoff 20/40/80…300 s por perfil | intervalo normal | Revisão: erro persistente gastava orçamento a cada 10 s |
+| 21 | Posts malformados descartados antes do RPC (`separarValidos`) | — | Revisão: 1 post ruim fazia rollback do lote e travava alertas do perfil |
+| 22 | Circuit breaker com estado em `config` sem controle de concorrência | RPC atômica | Aceitável no MVP (ticks raramente se sobrepõem); revisitar na Fase 6 |
+| 23 | Testes de integração só com `pnpm test:integracao` | rodar sempre | Criam linhas no banco local e podem disparar o notificar do cron |

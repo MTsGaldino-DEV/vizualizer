@@ -119,6 +119,9 @@ export function custoMensal(p: {
   return { reqPorPerfilDia, reqMes, custoMes: reqMes * p.precoPorReq };
 }
 
+/** Perfil com erro persistente não deve gastar orçamento no ritmo quente: 20, 40, 80… até 300 s. */
+export const intervaloErroS = (errosSeguidos: number) => Math.min(300, 10 * 2 ** errosSeguidos);
+
 export interface EstadoCircuito {
   errosSeguidos: number;
   abertoAte: Date | null;

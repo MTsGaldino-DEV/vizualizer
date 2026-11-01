@@ -23,6 +23,16 @@ Deno.serve(async () => {
   };
   const urlPainel = env("URL_PAINEL") ?? "http://localhost:3000";
 
+  // Falha ao gravar o resultado deixa a linha arrendada só 30 s → reenvio. Tenta 3x e grita no log.
+  const atualizar = async (id: number, campos: Record<string, unknown>) => {
+    for (let i = 0; i < 3; i++) {
+      const { error } = await db.from("notificacoes").update(campos).eq("id", id);
+      if (!error) return;
+      console.error(`notificação ${id}: falha ao gravar resultado (${error.message}), tentativa ${i + 1}`);
+      await new Promise((r) => setTimeout(r, 300 * (i + 1)));
+    }
+  };
+
   const { data: fila, error } = await db.rpc("pegar_notificacoes", { lim: 20 });
   if (error) return json({ erro: error.message }, 500);
   if (!fila?.length) return json({ enviados: 0 });
@@ -34,6 +44,10 @@ Deno.serve(async () => {
         db.from("dispositivos").select("*").eq("id", n.dispositivo_id).single(),
       ]);
       if (!v || !d) throw new Error("vídeo ou dispositivo sumiu");
+      if (!d.ativo) {
+        await atualizar(n.id, { status: "falhou", erro: "dispositivo inativo" });
+        return;
+      }
 
       let linkBaixar: string | null = null;
       if (v.storage_path) {
@@ -57,18 +71,15 @@ Deno.serve(async () => {
       const r = canal ? await canal.enviar(d.destino, msg) : { ok: false as const, erro: `canal ${d.tipo} desconhecido` };
 
       if (r.ok) {
-        await db.from("notificacoes").update({ status: "enviado", enviado_em: new Date().toISOString(), erro: r.simulado ? "simulado" : null }).eq("id", n.id);
+        await atualizar(n.id, { status: "enviado", enviado_em: new Date().toISOString(), erro: r.simulado ? "simulado" : null });
         return;
       }
       const desistir = n.tentativas >= MAX_TENTATIVAS || r.desativarDispositivo;
-      await db
-        .from("notificacoes")
-        .update({
-          status: desistir ? "falhou" : "pendente",
-          erro: r.erro,
-          proxima_tentativa_em: new Date(Date.now() + backoffS(n.tentativas) * 1000).toISOString(),
-        })
-        .eq("id", n.id);
+      await atualizar(n.id, {
+        status: desistir ? "falhou" : "pendente",
+        erro: r.erro,
+        proxima_tentativa_em: new Date(Date.now() + backoffS(n.tentativas) * 1000).toISOString(),
+      });
       if (r.desativarDispositivo) await db.from("dispositivos").update({ ativo: false }).eq("id", d.id);
       throw new Error(r.erro);
     }),

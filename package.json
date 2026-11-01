@@ -8,7 +8,10 @@
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "simular": "tsx scripts/simular.ts"
+    "simular": "tsx scripts/simular.ts",
+    "test:integracao": "vitest run --mode integracao scripts/integracao.test.ts",
+    "criar-usuario": "tsx scripts/criar-usuario.ts",
+    "dev": "pnpm --filter @vizualizer/painel dev"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

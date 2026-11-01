@@ -106,6 +106,9 @@ create policy "autenticado lê perfis" on perfis for select to authenticated usi
 create policy "autenticado gerencia perfis" on perfis for all to authenticated using (true) with check (true);
 create policy "autenticado lê videos" on videos for select to authenticated using (true);
 create policy "autenticado atualiza status do video" on videos for update to authenticated using (true) with check (true);
+-- Painel só altera `status` (url_video/storage_path ficam com o service role: evita SSRF no baixar-video).
+revoke update on videos from authenticated;
+grant update (status) on videos to authenticated;
 create policy "autenticado lê checagens" on checagens for select to authenticated using (true);
 create policy "dono gerencia dispositivos" on dispositivos for all to authenticated
   using (usuario_id = auth.uid()) with check (usuario_id = auth.uid());
@@ -244,6 +247,7 @@ $$;
 
 revoke execute on function pegar_perfis_vencidos(int), registrar_posts(uuid, jsonb, boolean),
   pegar_job_ia(), pegar_notificacoes(int) from public, anon, authenticated;
+revoke execute on function estatisticas_painel() from public, anon;
 grant execute on function estatisticas_painel() to authenticated;
 
 insert into config (chave, valor) values

@@ -11,18 +11,11 @@ Deno.serve(async (req) => {
   const corpo = await req.json().catch(() => ({}));
   if (corpo.limpar) return json(await limpar(db));
 
-  const { data: pendentes } = await db
-    .from("videos")
-    .select("id,perfil_id,shortcode,url_video,download_tentativas")
-    .eq("status", "novo")
-    .is("storage_path", null)
-    .not("url_video", "is", null)
-    .lt("download_tentativas", 3)
-    .order("detectado_em", { ascending: false })
-    .limit(5);
+  const { data: pendentes, error } = await db.rpc("pegar_downloads", { lim: 5 });
+  if (error) return json({ erro: error.message }, 500);
 
   const res = await Promise.allSettled(
-    (pendentes ?? []).map(async (v) => {
+    (pendentes ?? []).map(async (v: any) => {
       const caminho = `${v.perfil_id}/${v.shortcode}.mp4`;
       try {
         if (v.url_video.startsWith("mock://")) {
@@ -34,20 +27,22 @@ Deno.serve(async (req) => {
           const { error } = await db.storage.from(BUCKET).upload(caminho, await r.blob(), { contentType: "video/mp4", upsert: true });
           if (error) throw error;
         }
-        await db.from("videos").update({ storage_path: caminho, status: "baixado", download_erro: null }).eq("id", v.id);
+        const ok = await db.from("videos").update({ storage_path: caminho, download_erro: null }).eq("id", v.id);
+        if (ok.error) throw ok.error;
+        // Só avança o status se o painel ainda não mexeu nele.
+        await db.from("videos").update({ status: "baixado" }).eq("id", v.id).eq("status", "novo");
       } catch (e) {
         const erro = e instanceof Error ? e.message : String(e);
-        await db.from("videos").update({ download_tentativas: v.download_tentativas + 1, download_erro: erro }).eq("id", v.id);
+        await db.from("videos").update({ download_erro: erro, download_pego_em: null }).eq("id", v.id);
         throw new Error(`${v.shortcode}: ${erro}`);
       }
     }),
   );
-  const falhas = res.filter((r) => r.status === "rejected").length;
-  if (falhas) console.error(res.filter((r) => r.status === "rejected").map((r) => (r as PromiseRejectedResult).reason));
-  return json({ baixados: res.length - falhas, falhas });
+  const falhas = res.filter((r) => r.status === "rejected") as PromiseRejectedResult[];
+  for (const f of falhas) console.error("download falhou:", f.reason);
+  return json({ baixados: res.length - falhas.length, falhas: falhas.length });
 });
 
-// deno-lint-ignore no-explicit-any
 async function limpar(db: any) {
   const limite = Date.now() - 48 * 3600_000;
   const { data: pastas } = await db.storage.from(BUCKET).list("", { limit: 1000 });
@@ -57,6 +52,10 @@ async function limpar(db: any) {
     const { data: arquivos } = await db.storage.from(BUCKET).list(p.name, { limit: 1000 });
     for (const a of arquivos ?? []) if (new Date(a.created_at).getTime() < limite) remover.push(`${p.name}/${a.name}`);
   }
-  if (remover.length) await db.storage.from(BUCKET).remove(remover);
+  if (remover.length) {
+    await db.storage.from(BUCKET).remove(remover);
+    // Sem isso, notificar/worker gerariam signed URL para arquivo que não existe mais.
+    await db.from("videos").update({ storage_path: null }).in("storage_path", remover);
+  }
   return { removidos: remover.length };
 }

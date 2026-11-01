@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" role="img" aria-label="Mascote Vizu: um suricato saindo da toca, de pé e atento">
+<g fill="#FFFFFF" stroke="#FFFFFF" stroke-width="16" stroke-linejoin="round">
+<ellipse cx="100" cy="214" rx="78" ry="18"></ellipse>
+<path d="M64 222 C62 170 70 128 88 110 L112 110 C130 128 138 170 136 222 Z"></path>
+<g transform="translate(45 10) scale(1.1)">
+<circle cx="18" cy="38" r="9"></circle>
+<circle cx="82" cy="38" r="9"></circle>
+<path d="M50 8 C72 8 86 24 85 44 C84 62 66 80 54 94 C52 96 48 96 46 94 C34 80 16 62 15 44 C14 24 28 8 50 8 Z"></path>
+</g>
+</g>
+<ellipse cx="100" cy="214" rx="78" ry="18" fill="#0B0B0C" stroke="#0B0B0C" stroke-width="4"></ellipse>
+<path d="M64 222 C62 170 70 128 88 110 L112 110 C130 128 138 170 136 222 Z" fill="#F3ECE0" stroke="#0B0B0C" stroke-width="5" stroke-linejoin="round"></path>
+<ellipse cx="100" cy="182" rx="20" ry="32" fill="#FFF8EE"></ellipse>
+<rect x="74" y="146" width="16" height="34" rx="8" transform="rotate(-12 82 163)" fill="#F3ECE0" stroke="#0B0B0C" stroke-width="5"></rect>
+<rect x="110" y="146" width="16" height="34" rx="8" transform="rotate(12 118 163)" fill="#F3ECE0" stroke="#0B0B0C" stroke-width="5"></rect>
+<path d="M22 214 A78 18 0 0 0 178 214" fill="#0B0B0C" stroke="#0B0B0C" stroke-width="4"></path>
+<g transform="translate(45 10) scale(1.1)">
+<circle cx="18" cy="38" r="9" fill="#3A302A" stroke="#0B0B0C" stroke-width="4"></circle>
+<circle cx="82" cy="38" r="9" fill="#3A302A" stroke="#0B0B0C" stroke-width="4"></circle>
+<path d="M50 8 C72 8 86 24 85 44 C84 62 66 80 54 94 C52 96 48 96 46 94 C34 80 16 62 15 44 C14 24 28 8 50 8 Z" fill="#F3ECE0" stroke="#0B0B0C" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M50 14 C44 20 44 28 50 32 C56 28 56 20 50 14 Z" fill="#D9CBB6"></path>
+<ellipse cx="35" cy="45" rx="10" ry="13" transform="rotate(25 35 45)" fill="#0B0B0C"></ellipse>
+<ellipse cx="65" cy="45" rx="10" ry="13" transform="rotate(-25 65 45)" fill="#0B0B0C"></ellipse>
+<circle cx="36" cy="44" r="4.5" fill="#C8FF2E"></circle>
+<circle cx="37.6" cy="42.4" r="1.5" fill="#FFFFFF"></circle>
+<circle cx="64" cy="44" r="4.5" fill="#C8FF2E"></circle>
+<circle cx="65.6" cy="42.4" r="1.5" fill="#FFFFFF"></circle>
+<ellipse cx="50" cy="88" rx="5" ry="3.5" fill="#0B0B0C"></ellipse>
+</g>
+</svg>

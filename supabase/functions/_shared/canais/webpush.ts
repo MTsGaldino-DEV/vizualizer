@@ -15,7 +15,7 @@ export function criarCanalWebPush(publica?: string, privada?: string, contato = 
       const payload = JSON.stringify({ title: msg.titulo, body: msg.corpo, icon: "/icone-192.png", data: { url: msg.url } });
       try {
         // deno-lint-ignore no-explicit-any
-        await webpush.sendNotification(destino as any, payload, { TTL: 600 });
+        await webpush.sendNotification(destino as any, payload, { TTL: 600, timeout: 8000 });
         return { ok: true };
       } catch (e) {
         const status = (e as { statusCode?: number }).statusCode;

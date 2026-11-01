@@ -5,6 +5,7 @@ import {
   custoMensal,
   estaEmJanela,
   fatorOrcamento,
+  intervaloErroS,
   proximoCheck,
 } from "./agendamento";
 
@@ -70,6 +71,11 @@ describe("custoMensal (fórmula 3.3)", () => {
     expect(r.reqMes).toBe(810_000);
     expect(r.custoMes).toBeCloseTo(810);
   });
+});
+
+describe("intervaloErroS", () => {
+  it("backoff exponencial a partir de 10 s com teto de 300 s", () =>
+    expect([1, 2, 3, 5, 10].map(intervaloErroS)).toEqual([20, 40, 80, 300, 300]));
 });
 
 describe("avaliarCircuito", () => {
