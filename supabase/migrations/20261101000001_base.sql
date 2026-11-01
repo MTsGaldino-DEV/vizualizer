@@ -28,7 +28,7 @@ create table videos (
   eh_reels boolean not null default false,
   publicado_em timestamptz not null,
   detectado_em timestamptz not null default now(),
-  latencia_ms int generated always as ((extract(epoch from (detectado_em - publicado_em)) * 1000)::int) stored,
+  latencia_ms bigint generated always as ((extract(epoch from (detectado_em - publicado_em)) * 1000)::bigint) stored, -- bigint: post fixado antigo passa de 24 dias em ms
   legenda text,
   permalink text not null,
   url_thumb text,
@@ -146,6 +146,7 @@ language plpgsql
 security definer
 set search_path = public
 as $$
+#variable_conflict use_column
 declare
   r record;
   v_id uuid;
